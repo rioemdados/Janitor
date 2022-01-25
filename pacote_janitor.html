@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>PACOTE JANITOR</title>
+
+<script src="pacote_janitor_files/header-attrs-2.11/header-attrs.js"></script>
+<script src="pacote_janitor_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="pacote_janitor_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="pacote_janitor_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="pacote_janitor_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="pacote_janitor_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="pacote_janitor_files/navigation-1.1/tabsets.js"></script>
+<link href="pacote_janitor_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="pacote_janitor_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">PACOTE JANITOR</h1>
+<h4 class="date">jan/2022</h4>
+
+</div>
+
+
+<p>O pacote janitor disponível no R contém várias funções simples e fáceis para limpeza de base de dados. Veja como utilizá-lo:</p>
+<pre class="r"><code>install.packages(&quot;janitor&quot;)
+install.packages(&quot;tidyverse&quot;)
+install.packages(&quot;readxl&quot;)</code></pre>
+<pre class="r"><code>library(janitor)
+library(tidyverse)
+library(readxl)</code></pre>
+<p>Como exemplo, vamos utilizar a base de dados sobre os cinemas da cidade do Rio de Janeiro disponível em <a href="https://www.data.rio/documents/cinemas-por-n%C3%BAmero-de-salas-e-capacidade-segundo-as-regi%C3%B5es-administrativas-ra-e-bairros-do-munic%C3%ADpio-do-rio-de-janeiro-2017/about">DATA.RIO</a>:</p>
+<pre class="r"><code>cinemas &lt;- read_excel(&quot;D:/beatr/Downloads/458.xlsx&quot;)</code></pre>
+<p>Observe que o nome das variáveis contém letras maiúsculas, espaços e acentos, o que atrapalha na programação:</p>
+<pre class="r"><code>cinemas %&gt;%
+  head() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<colgroup>
+<col width="24%" />
+<col width="12%" />
+<col width="24%" />
+<col width="16%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Regiões Administrativas</th>
+<th align="left">Bairros</th>
+<th align="left">Nome do Cinema</th>
+<th align="right">Número de Salas</th>
+<th align="right">Capacidade de Pessoas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">II Centro</td>
+<td align="left">Centro</td>
+<td align="left">Centro Cultural Odeon</td>
+<td align="right">1</td>
+<td align="right">550</td>
+</tr>
+<tr class="even">
+<td align="left">IV Botafogo</td>
+<td align="left">Laranjeiras</td>
+<td align="left">Kinoplex Sao Luiz</td>
+<td align="right">4</td>
+<td align="right">814</td>
+</tr>
+<tr class="odd">
+<td align="left">IV Botafogo</td>
+<td align="left">Laranjeiras</td>
+<td align="left">Cine Museu da República</td>
+<td align="right">1</td>
+<td align="right">70</td>
+</tr>
+<tr class="even">
+<td align="left">IV Botafogo</td>
+<td align="left">Botafogo</td>
+<td align="left">Cinemark Botafogo</td>
+<td align="right">6</td>
+<td align="right">1353</td>
+</tr>
+<tr class="odd">
+<td align="left">IV Botafogo</td>
+<td align="left">Botafogo</td>
+<td align="left">Espaço Itaú Botafogo</td>
+<td align="right">6</td>
+<td align="right">934</td>
+</tr>
+<tr class="even">
+<td align="left">IV Botafogo</td>
+<td align="left">Botafogo</td>
+<td align="left">Estação Net Rio</td>
+<td align="right">5</td>
+<td align="right">450</td>
+</tr>
+</tbody>
+</table>
+<p>A função clean_names() resolve este problema limpando e padronizando os nomes das variáveis:</p>
+<pre class="r"><code>cinemas_clean &lt;-  cinemas %&gt;%
+  janitor::clean_names() 
+
+names(cinemas_clean)</code></pre>
+<pre><code>## [1] &quot;regioes_administrativas&quot; &quot;bairros&quot;                
+## [3] &quot;nome_do_cinema&quot;          &quot;numero_de_salas&quot;        
+## [5] &quot;capacidade_de_pessoas&quot;</code></pre>
+<p>Veja que a função removeu os acentos, colocou todas as letras em minúsculas e substituiu os espaços por _</p>
+<pre class="r"><code>cinemas_clean %&gt;%
+  head() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<colgroup>
+<col width="24%" />
+<col width="12%" />
+<col width="24%" />
+<col width="16%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">regioes_administrativas</th>
+<th align="left">bairros</th>
+<th align="left">nome_do_cinema</th>
+<th align="right">numero_de_salas</th>
+<th align="right">capacidade_de_pessoas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">II Centro</td>
+<td align="left">Centro</td>
+<td align="left">Centro Cultural Odeon</td>
+<td align="right">1</td>
+<td align="right">550</td>
+</tr>
+<tr class="even">
+<td align="left">IV Botafogo</td>
+<td align="left">Laranjeiras</td>
+<td align="left">Kinoplex Sao Luiz</td>
+<td align="right">4</td>
+<td align="right">814</td>
+</tr>
+<tr class="odd">
+<td align="left">IV Botafogo</td>
+<td align="left">Laranjeiras</td>
+<td align="left">Cine Museu da República</td>
+<td align="right">1</td>
+<td align="right">70</td>
+</tr>
+<tr class="even">
+<td align="left">IV Botafogo</td>
+<td align="left">Botafogo</td>
+<td align="left">Cinemark Botafogo</td>
+<td align="right">6</td>
+<td align="right">1353</td>
+</tr>
+<tr class="odd">
+<td align="left">IV Botafogo</td>
+<td align="left">Botafogo</td>
+<td align="left">Espaço Itaú Botafogo</td>
+<td align="right">6</td>
+<td align="right">934</td>
+</tr>
+<tr class="even">
+<td align="left">IV Botafogo</td>
+<td align="left">Botafogo</td>
+<td align="left">Estação Net Rio</td>
+<td align="right">5</td>
+<td align="right">450</td>
+</tr>
+</tbody>
+</table>
+<p>Outras opções de escrita utilizando a prática CamelCase:</p>
+<pre class="r"><code>  cinemas %&gt;%
+  janitor::clean_names(case = &quot;snake&quot;) %&gt;%
+  names()</code></pre>
+<pre><code>## [1] &quot;regioes_administrativas&quot; &quot;bairros&quot;                
+## [3] &quot;nome_do_cinema&quot;          &quot;numero_de_salas&quot;        
+## [5] &quot;capacidade_de_pessoas&quot;</code></pre>
+<pre class="r"><code>  cinemas %&gt;%
+  janitor::clean_names(case = &quot;upper_camel&quot;) %&gt;%
+  names()</code></pre>
+<pre><code>## [1] &quot;RegioesAdministrativas&quot; &quot;Bairros&quot;                &quot;NomeDoCinema&quot;          
+## [4] &quot;NumeroDeSalas&quot;          &quot;CapacidadeDePessoas&quot;</code></pre>
+<pre class="r"><code>  cinemas %&gt;%
+  janitor::clean_names(case = &quot;lower_camel&quot;) %&gt;%
+  names()</code></pre>
+<pre><code>## [1] &quot;regioesAdministrativas&quot; &quot;bairros&quot;                &quot;nomeDoCinema&quot;          
+## [4] &quot;numeroDeSalas&quot;          &quot;capacidadeDePessoas&quot;</code></pre>
+<p>Com a função tably() é possível fazer tabelas de frequências (absoluta e relativa) junto com o operador pipe:</p>
+<pre class="r"><code>mtcars %&gt;% 
+  janitor::tabyl(cyl) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">cyl</th>
+<th align="right">n</th>
+<th align="right">percent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4</td>
+<td align="right">11</td>
+<td align="right">0.34375</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">7</td>
+<td align="right">0.21875</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="right">14</td>
+<td align="right">0.43750</td>
+</tr>
+</tbody>
+</table>
+<p>Também é possível fazer tabelas de contingência com tabyl(). Basta utilizar duas variáveis:</p>
+<pre class="r"><code>mtcars %&gt;% 
+  janitor::tabyl(cyl, am) %&gt;%
+  knitr::kable() </code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">cyl</th>
+<th align="right">0</th>
+<th align="right">1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4</td>
+<td align="right">3</td>
+<td align="right">8</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">4</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="right">12</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+<p>As funções com o prefixo adorn_* alteraram a estética da tabela, por exemplo:</p>
+<pre class="r"><code>mtcars %&gt;% 
+  janitor::tabyl(cyl) %&gt;% 
+  janitor::adorn_pct_formatting() %&gt;% 
+  janitor::adorn_totals(where = &quot;row&quot;) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">cyl</th>
+<th align="right">n</th>
+<th align="left">percent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">4</td>
+<td align="right">11</td>
+<td align="left">34.4%</td>
+</tr>
+<tr class="even">
+<td align="left">6</td>
+<td align="right">7</td>
+<td align="left">21.9%</td>
+</tr>
+<tr class="odd">
+<td align="left">8</td>
+<td align="right">14</td>
+<td align="left">43.8%</td>
+</tr>
+<tr class="even">
+<td align="left">Total</td>
+<td align="right">32</td>
+<td align="left">-</td>
+</tr>
+</tbody>
+</table>
+<p>Referências:</p>
+<p><a href="https://github.com/sfirke/janitor" class="uri">https://github.com/sfirke/janitor</a></p>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+---
+title: "PACOTE JANITOR"
+date: "jan/2022"
+output:
+  html_document:
+    self_contained: false
+    fig_width: 7
+    fig_height: 6
+    fig_caption: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE)
+
+```
+
+
+O pacote janitor disponível no R contém várias funções simples e fáceis para limpeza de base de dados. Veja como utilizá-lo:
+
+```{r, eval=FALSE}
+install.packages("janitor")
+install.packages("tidyverse")
+install.packages("readxl")
+```
+
+```{r}
+library(janitor)
+library(tidyverse)
+library(readxl)
+```
+
+Como exemplo, vamos utilizar a base de dados sobre os cinemas da cidade do Rio de Janeiro disponível em [DATA.RIO](https://www.data.rio/documents/cinemas-por-n%C3%BAmero-de-salas-e-capacidade-segundo-as-regi%C3%B5es-administrativas-ra-e-bairros-do-munic%C3%ADpio-do-rio-de-janeiro-2017/about):
+```{r}
+cinemas <- read_excel("D:/beatr/Downloads/458.xlsx")
+```
+
+Observe que o nome das variáveis contém letras maiúsculas, espaços e acentos, o que atrapalha na programação:
+```{r}
+cinemas %>%
+  head() %>% 
+  knitr::kable()
+```
+
+
+A função clean_names() resolve este problema limpando e padronizando os nomes das variáveis:
+```{r}
+cinemas_clean <-  cinemas %>%
+  janitor::clean_names() 
+
+names(cinemas_clean)
+```
+
+Veja que a função removeu os acentos, colocou todas as letras em minúsculas  e substituiu os espaços por _
+
+```{r}
+cinemas_clean %>%
+  head() %>% 
+  knitr::kable()
+```
+
+Outras opções de escrita utilizando a prática CamelCase:
+```{r}
+  cinemas %>%
+  janitor::clean_names(case = "snake") %>%
+  names()
+
+  cinemas %>%
+  janitor::clean_names(case = "upper_camel") %>%
+  names()
+
+  cinemas %>%
+  janitor::clean_names(case = "lower_camel") %>%
+  names()
+```
+
+
+Com a função tably() é possível fazer tabelas de frequências (absoluta e relativa) junto com o operador pipe:
+```{r}
+mtcars %>% 
+  janitor::tabyl(cyl) %>%
+  knitr::kable()
+```
+
+Também é possível fazer tabelas de contingência com tabyl(). Basta utilizar duas variáveis:
+```{r}
+mtcars %>% 
+  janitor::tabyl(cyl, am) %>%
+  knitr::kable() 
+  
+```
+
+As funções com o prefixo adorn_* alteraram a estética da tabela, por exemplo:
+```{r}
+mtcars %>% 
+  janitor::tabyl(cyl) %>% 
+  janitor::adorn_pct_formatting() %>% 
+  janitor::adorn_totals(where = "row") %>%
+  knitr::kable()
+```
+
+
+
+
+Referências: 
+
+https://github.com/sfirke/janitor
